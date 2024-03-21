@@ -1,0 +1,44 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parking Garage Simulator</title>
+    <style>
+        .spot {
+            width: 100px;
+            /* Adjusted for better visibility */
+            height: 50px;
+            display: inline-block;
+            margin: 5px;
+            border: 1px solid black;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 50px;
+            /* Aligns text vertically */
+        }
+
+        .available {
+            background-color: green;
+        }
+
+        .unavailable {
+            background-color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Parking Garage Simulator</h1>
+    <div id="garage-layout">
+        {% for spot in parking_spots %}
+        <div class="spot {{ 'available' if spot.available else 'unavailable' }}">
+            Spot {{ spot.id }} - ${{ spot.price }}
+        </div>
+        {% endfor %}
+    </div>
+</body>
+
+</html>
