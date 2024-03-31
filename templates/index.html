@@ -6,6 +6,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parking Garage Simulator</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <style>
         .spot {
             width: 100px;
@@ -31,6 +36,19 @@
 </head>
 
 <body>
+    <nav>
+        <ul>
+          <li class="home"><a href="/">Garage</a></li>
+          {% if user %}
+            <li><a href="/account">Welcome {{user}}</a></li>
+            <li><a href="/signout">Sign out</a></li>
+          {% else %}
+          <li class="right-nav" ><a href="/login">Log in</a></li>
+          <li class="right-nav"><a href="/signup">Sign up</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+
     <h1>Parking Garage Simulator</h1>
     <div id="garage-layout">
         {% for spot in parking_spots %}

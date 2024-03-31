@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Brave Rats</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+  <style>
+    
+  </style>
+</head>
+
+<body>
+    <div class="container ">
+        <div class="row">            
+            <div class="login-container col-lg-4 col-md-6 col-sm-8 col-xs-12">
+                 <div class="login-title text-center">
+                        <h2><span>My<strong>Garage</strong></span></h2>
+                 </div>
+                <div class="login-content">
+                    <div class="login-header ">
+                        <h3><strong>Log in to MyGarage</strong></h3>
+                        
+                    </div>
+                    <div class="login-body">
+                        <form role="form" action="/login" method="post" class="login-form">
+                            <div class="form-group ">
+                                {{ form.hidden_tag() }}
+                                <div class="pos-r">     
+                                    {{ form.username(id="form-username",placeholder="Username...",class_="form-username form-control") }}                                   
+                                    
+                                    <i class="fa fa-user"></i>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="pos-r">     
+                                    {{ form.password(id="form-password",type="password",placeholder="Password...",class_="form-password form-control") }}                               
+                                    
+                                    <i class="fa fa-lock"></i>                                        
+                                </div>
+                            </div>
+                            <div class="form-group text-right">     
+                                <a href="#" class="bold"> Forgot password? sucks</a>
+                            </div>   
+
+                            <div class="form-group">     
+   
+                                <button name={{form.submit.name}} type="submit" class="btn btn-primary form-control"><strong>Sign in</strong></button>  
+                            </div>   
+                                                                          
+                        </form>
+                    </div> <!-- end  login-body -->                     
+                </div><!-- end  login-content -->  
+                <div class="login-footer text-center template">
+                    <h5>Don't have an account?<a href="/signup" class="bold"> Sign up </a>     </h5>
+               
+                </div>
+            </div>  <!-- end  login-container -->      
+
+        </div>
+    </div><!-- end container -->
+</body>
+
+</html>
