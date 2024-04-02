@@ -67,8 +67,9 @@ def index():
     # Calculate dynamic pricing based on the position of the spot in the garage
     for spot in parking_spots:
         distance_from_top = spot["id"]  # Distance from the top of the garage
+        distance_from_bottom = GARAGE_SIZE - spot["id"] - 1 # Distance from bottom
         price_multiplier = 1 + (
-            distance_from_top / GARAGE_SIZE
+            distance_from_top / GARAGE_SIZE + distance_from_bottom / GARAGE_SIZE
         )  # Higher distance -> higher price
         spot["price"] = round(BASE_PRICE * price_multiplier, 2)
 
@@ -77,6 +78,20 @@ def index():
 
     return render_template("index.html", parking_spots=parking_spots, user=user)
 
+
+@app.route('/cart')
+@login_required
+def cart():
+    # Implement logic to display cart contents and process checkout
+    return render_template('cart.html')
+
+
+@app.route('/checkout', methods=['POST'])
+@login_required
+def checkout():
+    # Implement logic to process the checkout
+    # For example, handle payment, update database, etc.
+    return "Checkout successful! Thank you for shopping with us."
 
 if __name__ == "__main__":
     app.run(debug=True)
