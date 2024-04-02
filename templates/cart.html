@@ -10,11 +10,15 @@
 <body>
     <h1>Cart</h1>
     <!-- Display cart contents here -->
+    {% if not spot %}
     <p>Your cart is currently empty.</p>
     
+    {% else %}
     <!-- Add checkout button -->
+    <p>You have reserved spot #{{spot.id}} for {{'${:,.2f}'.format(spot.price)}}</p>
     <form action="{{ url_for('checkout') }}" method="post">
         <button type="submit">Checkout</button>
     </form>
+    {% endif %}
 </body>
 </html>

@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from forms import LoginForm, RegisterForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from models import Users
+from models import Users, Garage
 import random
 
 app = Flask(__name__)
@@ -10,6 +10,8 @@ app.config['SECRET_KEY'] = 'CHANGE_THIS_TO_ENV_VAR'
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+login_manager.login_view = "signup"
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -55,35 +57,27 @@ def signup():
 
 @app.route("/")
 def index():
-    # Define garage size and base price
-    GARAGE_SIZE = 100
-    BASE_PRICE = 10
-
-    # Initialize parking spots with random availability for demonstration
-    parking_spots = [
-        {"id": i, "available": random.choice([True, False])} for i in range(GARAGE_SIZE)
-    ]
-
-    # Calculate dynamic pricing based on the position of the spot in the garage
-    for spot in parking_spots:
-        distance_from_top = spot["id"]  # Distance from the top of the garage
-        distance_from_bottom = GARAGE_SIZE - spot["id"] - 1 # Distance from bottom
-        price_multiplier = 1 + (
-            distance_from_top / GARAGE_SIZE + distance_from_bottom / GARAGE_SIZE
-        )  # Higher distance -> higher price
-        spot["price"] = round(BASE_PRICE * price_multiplier, 2)
+    parking_spots = Garage.getAllSpots()
 
     user = current_user.username if current_user.is_authenticated else None #TODO change this to their actual name
 
 
     return render_template("index.html", parking_spots=parking_spots, user=user)
 
+@app.route('/reserve/<i>')
+@login_required
+def reserve(i):
+    Users.userReserveSpot(current_user.id,i)
+    Garage.reserveSpot(i)
+    return redirect(url_for("cart"))
 
 @app.route('/cart')
 @login_required
 def cart():
-    # Implement logic to display cart contents and process checkout
-    return render_template('cart.html')
+    spot = None
+    if current_user.reserved != -1:
+        spot = Garage.getSpotById(current_user.reserved).__dict__
+    return render_template('cart.html', spot=spot)
 
 
 @app.route('/checkout', methods=['POST'])

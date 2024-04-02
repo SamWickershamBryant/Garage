@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, select, update, delete, func
+from sqlalchemy import create_engine, Column, Integer, String, Float, Boolean, select, update, delete, func
 #from sqlalchemy.sql import func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -13,6 +13,13 @@ class User(Base, UserMixin):
     email = Column(String(50), unique=True)
     username = Column(String(20), unique=True)
     password = Column(String(256), unique=True)
+    reserved = Column(Integer, default=-1)
+
+class Spot(Base):
+    __tablename__ = 'spots'
+    id = Column(Integer, primary_key=True)
+    price = Column(Float)
+    reserved = Column(Boolean)
 
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
@@ -35,7 +42,28 @@ class Users():
         except:
             session.rollback()
             return False
+    def userReserveSpot(uid,sid):
+        usr = session.query(User).get(uid)
+        usr.reserved = sid
+        session.commit()
     def getAllUsers():
         users = session.query(User).all()
         users_as_dict = [user.__dict__ for user in users]
         return users_as_dict
+
+class Garage():
+    def getSpotById(id):
+        spot = session.query(Spot).get(id)
+        return spot
+    def reserveSpot(id):
+        spot = session.query(Spot).get(id)
+        spot.reserved = True
+        session.commit()
+    def getAllSpots():
+        spots = session.query(Spot).all()
+        spots_as_dict = [spot.__dict__ for spot in spots]
+        return spots_as_dict
+    def createSpot(spotdict):
+        spot = Spot(**spotdict)
+        session.add(spot)
+        session.commit()

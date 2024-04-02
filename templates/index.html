@@ -1,7 +1,5 @@
-<!-- templates/index.html -->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,52 +11,69 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <style>
-        .spot {
-            width: 100px;
-            /* Adjusted for better visibility */
-            height: 50px;
-            display: inline-block;
+        .spot-card {
             margin: 5px;
-            border: 1px solid black;
+        }
+        .spot-body {
             text-align: center;
-            vertical-align: middle;
-            line-height: 50px;
-            /* Aligns text vertically */
         }
-
         .available {
-            background-color: green;
+            background-color: #28a745;
+            color: white;
         }
-
         .unavailable {
-            background-color: red;
+            background-color: #dc3545;
+            color: white;
         }
     </style>
 </head>
-
 <body>
-    <nav>
-        <ul>
-          <li class="home"><a href="/">Garage</a></li>
-          {% if user %}
-            <li><a href="/account">Welcome {{user}}</a></li>
-            <li><a href="/signout">Sign out</a></li>
-          {% else %}
-          <li class="right-nav" ><a href="/login">Log in</a></li>
-          <li class="right-nav"><a href="/signup">Sign up</a></li>
-          <li class="right-nav"><a href="/cart">Checkout</a></li>
-          {% endif %}
-        </ul>
-      </nav>
-
-    <h1>Parking Garage Simulator</h1>
-    <div id="garage-layout">
-        {% for spot in parking_spots %}
-        <div class="spot {{ 'available' if spot.available else 'unavailable' }}">
-            Spot {{ spot.id }} - ${{ spot.price }}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Garage</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                {% if user %}
+                <li class="nav-item"><a class="nav-link" href="/account">Welcome {{user}}</a></li>
+                <li class="nav-item"><a class="nav-link" href="/signout">Sign out</a></li>
+                <li class="nav-item"><a class="nav-link" href="/cart">Cart</a></li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="/login">Log in</a></li>
+                <li class="nav-item"><a class="nav-link" href="/signup">Sign up</a></li>
+                {% endif %}
+            </ul>
         </div>
-        {% endfor %}
-    </div>
-</body>
+    </nav>
 
+    <div class="container mt-4">
+        <h1 class="mb-4">MyGarage</h1>
+        <div class="row">
+            {% for spot in parking_spots %}
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                <!-- Check if the spot is available -->
+                {% if not spot.reserved %}
+                <a href="/reserve/{{ spot.id }}" class="text-decoration-none">
+                    <div class="card spot-card available">
+                        <div class="card-body spot-body">
+                            <h5 class="card-title">Spot {{ spot.id }}</h5>
+                            <p class="card-text">$ {{ spot.price }}</p>
+                        </div>
+                    </div>
+                </a>
+                {% else %}
+                <div class="card spot-card unavailable">
+                    <div class="card-body spot-body">
+                        <h5 class="card-title">Spot {{ spot.id }}</h5>
+                        <p class="card-text">$ {{ spot.price }}</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+</body>
 </html>
