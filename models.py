@@ -44,6 +44,7 @@ class ParkingSpace(Base):
     availability = Column(Boolean)
     garage_id = Column(Integer)
 
+
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 
@@ -68,10 +69,12 @@ class Users:
         except:
             session.rollback()
             return False
-    def userReserveSpot(uid,sid):
+
+    def userReserveSpot(uid, sid):
         usr = session.query(User).get(uid)
         usr.reserved = sid
         session.commit()
+
     def getAllUsers():
         users = session.query(User).all()
         users_as_dict = [user.__dict__ for user in users]
@@ -81,19 +84,28 @@ class Garages():
     def getSpotById(id):
         spot = session.query(ParkingSpace).get(id)
         return spot
+
     def reserveSpot(id):
         spot = session.query(ParkingSpace).get(id)
         spot.reserved = True
         session.commit()
+
     def getAllSpots():
         spots = session.query(ParkingSpace).all()
         spots_as_dict = [spot.__dict__ for spot in spots]
         return spots_as_dict
+
     def createSpot(spotdict):
         spot = ParkingSpace(**spotdict)
         session.add(spot)
         session.commit()
+
     def createGarage(garagedict):
         garage = Garage(**garagedict)
         session.add(garage)
         session.commit()
+
+    def getAllGarages():
+        garages = session.query(Garage).all()
+        garages_as_dict = [user.__dict__ for user in garages]
+        return garages_as_dict

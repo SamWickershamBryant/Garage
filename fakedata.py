@@ -8,7 +8,7 @@ def populateSpots():
     BASE_PRICE = 10
 
     for i in range(10):
-        garage = {'name':fake.name() + ' Garage', 'location':fake.address()}
+        garage = {'name':fake.name() + ' Garage', 'location':fake.address().replace('\n',' ')}
         Garages.createGarage(garage)
         for j in range(50):
             distance_from_top = j  # Distance from the top of the garage
