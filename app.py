@@ -70,6 +70,7 @@ def signup():
 @app.route("/")
 def index():
     garages = Garages.getAllGarages()
+    print(garages)
 
     user = (
         current_user.username if current_user.is_authenticated else None
