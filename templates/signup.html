@@ -1,88 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <title>Brave Rats</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-
-  <style>
-    
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyGarage - Sign Up</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 
 <body>
-    <div class="container ">
-        <div class="row">            
+    <div class="container">
+        <div class="row justify-content-center">
             <div class="login-container col-lg-4 col-md-6 col-sm-8 col-xs-12">
-                 <div class="login-title text-center">
-                        <h2><span>My<strong>Garage</strong></span></h2>
-                 </div>
+                <div class="login-title text-center">
+                    <h2><span>MyGarage</span></h2>
+                </div>
                 <div class="login-content">
-                    <div class="login-header ">
-                        <h3><strong>Sign up for MyGarage</strong></h3>
-                        
+                    <div class="login-header">
+                        <h3>Sign up for MyGarage</h3>
                     </div>
                     <div class="login-body">
                         <form role="form" action="/signup" method="post" class="login-form">
-                            <div class="form-group ">
-                                {{ form.hidden_tag() }}
+                            <div class="form-group">
+                                <!-- Email Field -->
                                 <div class="pos-r">
-                                    {% if form.email.errors %}
-      <ul class="form-group text-left errors">{% for error in form.email.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-    {% endif %}     
-                                    {{ form.email(id="form-username",placeholder="Email...",class_="form-username form-control") }}                                   
-                                    
-                                    <i class="fa fa-user"></i>
+                                    <input type="email" id="form-email" name="email" placeholder="Email..."
+                                        class="form-control">
+                                    <i class="fa fa-envelope"></i>
                                 </div>
-                                
-                                
                             </div>
-                            <div class="form-group ">
-                                <div class="pos-r">    
-                                    {% if form.username.errors %}
-      <ul class="form-group text-left errors">{% for error in form.username.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-    {% endif %}    
-                                    {{ form.username(id="form-username",placeholder="Username...",class_="form-username form-control") }}                                   
-                                    
+                            <div class="form-group">
+                                <!-- Username Field -->
+                                <div class="pos-r">
+                                    <input type="text" id="form-username" name="username" placeholder="Username..."
+                                        class="form-control">
                                     <i class="fa fa-user"></i>
                                 </div>
                             </div>
                             <div class="form-group">
-                                
-                                <div class="pos-r"> 
-                                    {% if form.password.errors %}
-      <ul class="form-group text-left errors">{% for error in form.password.errors %}<li>{{ error }}</li>{% endfor %}</ul>
-    {% endif %}       
-                                    {{ form.password(id="form-password",type="password",placeholder="Password...",class_="form-password form-control") }}                               
-                                    
-                                    <i class="fa fa-lock"></i>                                        
+                                <!-- Password Fields -->
+                                <div class="pos-r">
+                                    <input type="password" id="form-password" name="password" placeholder="Password..."
+                                        class="form-control">
+                                    <i class="fa fa-lock"></i>
                                 </div>
-                                <div class="pos-r">     
-                                    {{ form.confirmPassword(id="form-password",type="password",placeholder="Confirm Password...",class_="form-password form-control") }}                               
-                                    
-                                    <i class="fa fa-lock"></i>                                        
+                                <div class="pos-r">
+                                    <input type="password" id="form-confirm-password" name="confirmPassword"
+                                        placeholder="Confirm Password..." class="form-control">
+                                    <i class="fa fa-lock"></i>
                                 </div>
                             </div>
-                             
-
-                            <div class="form-group">     
-                                
-                                <button name={{form.submit.name}} type="submit" class="btn btn-primary form-control"><strong>Sign up</strong></button>  
-                            </div>   
-                                                                          
+                            <div class="form-group">
+                                <!-- Submit Button -->
+                                <button type="submit" class="btn btn-primary form-control">Sign up</button>
+                            </div>
                         </form>
-                    </div> <!-- end  login-body -->                     
-                </div><!-- end  login-content -->  
+                    </div><!-- end login-body -->
+                </div><!-- end login-content -->
                 <div class="login-footer text-center template">
-                    <h5>Already have an account?<a href="/login" class="bold"> Sign in </a>     </h5>
-               
+                    <!-- Sign In Link -->
+                    <h5>Already have an account? <a href="/login" class="bold">Sign in</a></h5>
                 </div>
-            </div>  <!-- end  login-container -->      
-
+            </div><!-- end login-container -->
         </div>
     </div><!-- end container -->
 </body>
