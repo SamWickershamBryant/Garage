@@ -11,7 +11,7 @@ def populateSpots():
         price_multiplier = 1 + (
             distance_from_top / GARAGE_SIZE + distance_from_bottom / GARAGE_SIZE
         )
-        spot = {'id':i,'price':round(BASE_PRICE * price_multiplier, 2),'reserved':random.choice([True, False])}
+        spot = {'id':i,'price':round(BASE_PRICE * price_multiplier, 2),'availability':random.choice([True, False]), 'garage_id':1}
         Garage.createSpot(spot)
 
 populateSpots()

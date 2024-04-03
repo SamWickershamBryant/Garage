@@ -4,6 +4,7 @@ from sqlalchemy import (
     Integer,
     String,
     ForeignKey,
+    Boolean,
     select,
     update,
     delete,
@@ -43,8 +44,8 @@ class ParkingSpace(Base):
     id = Column(Integer, primary_key=True)
     number = Column(Integer)
     price = Column(Integer)
-    availability = Column(Integer)
-    garage_id = Column(Integer, ForeignKey("garages.id"))
+    availability = Column(Boolean)
+    garage_id = Column(Integer)
 
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
@@ -81,17 +82,21 @@ class Users:
 
 class Garage():
     def getSpotById(id):
-        spot = session.query(Spot).get(id)
+        spot = session.query(ParkingSpace).get(id)
         return spot
     def reserveSpot(id):
-        spot = session.query(Spot).get(id)
+        spot = session.query(ParkingSpace).get(id)
         spot.reserved = True
         session.commit()
     def getAllSpots():
-        spots = session.query(Spot).all()
+        spots = session.query(ParkingSpace).all()
         spots_as_dict = [spot.__dict__ for spot in spots]
         return spots_as_dict
     def createSpot(spotdict):
-        spot = Spot(**spotdict)
+        spot = ParkingSpace(**spotdict)
         session.add(spot)
+        session.commit()
+    def createGarage(garagedict):
+        garage = Garage(**garagedict)
+        session.add(garage)
         session.commit()
