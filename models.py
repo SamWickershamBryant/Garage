@@ -33,9 +33,6 @@ class Garage(Base):
     name = Column(String(50))
     location = Column(String(100))
 
-    # Relationship with ParkingSpace
-    spaces = relationship("ParkingSpace", back_populates="garage")
-
 
 class ParkingSpace(Base):
     __tablename__ = "parking_spaces"
@@ -44,9 +41,6 @@ class ParkingSpace(Base):
     price = Column(Integer)
     availability = Column(Integer)
     garage_id = Column(Integer, ForeignKey("garages.id"))
-
-    # Relationship with Garage
-    garage = relationship("Garage", back_populates="spaces")
 
     def __init__(self, number, price, availability):
         self.number = number
