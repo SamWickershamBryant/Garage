@@ -80,14 +80,14 @@ def index():
 
 @app.route("/garage/<int:garage_id>")
 def garage_parking_spaces(garage_id):
-    garage = Garages.getGarageById()
+    garage = Garages.getGarageById(garage_id)
     if garage is None:
         # Handle garage not found
         return "404", 404
 
     parking_spaces = Garages.getSpacesbyGarageID(garage_id)
     return render_template(
-        "garage_detail.html", garage=garage, parking_spaces=parking_spaces
+        "garage.html", garage=garage, parking_spaces=parking_spaces
     )
 
 
