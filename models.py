@@ -46,15 +46,6 @@ class ParkingSpace(Base):
     availability = Column(Integer)
     garage_id = Column(Integer, ForeignKey("garages.id"))
 
-    # Relationship with Garage
-    garage = relationship("Garage", back_populates="spaces")
-
-    def __init__(self, number, price, availability):
-        self.number = number
-        self.price = price
-        self.availability = availability
-
-
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 

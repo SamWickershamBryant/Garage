@@ -10,7 +10,7 @@ from flask_login import (
     current_user,
 )
 from models import Users
-import random
+
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "CHANGE_THIS_TO_ENV_VAR"
@@ -72,11 +72,7 @@ def index():
 
     user = current_user.username if current_user.is_authenticated else None #TODO change this to their actual name
 
-        user = (
-            request.args.get("user") if request.args.get("user") else None
-        )  # Get user name from query parameters
-
-        return render_template("index.html", parking_spots=parking_spots, user=user)
+    return render_template("index.html", parking_spots=parking_spots, user=user)
 
 @app.route('/reserve/<i>')
 @login_required
