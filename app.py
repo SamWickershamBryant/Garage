@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from forms import LoginForm, RegisterForm
 from werkzeug.security import generate_password_hash, check_password_hash
-from models import Garage, ParkingSpace, session
+from models import Garages, ParkingSpace, session
 from flask_login import (
     LoginManager,
     login_user,
@@ -68,7 +68,7 @@ def signup():
 
 @app.route("/")
 def index():
-    parking_spots = Garage.getAllSpots()
+    parking_spots = Garages.getAllSpots()
 
     user = current_user.username if current_user.is_authenticated else None #TODO change this to their actual name
 
@@ -78,7 +78,7 @@ def index():
 @login_required
 def reserve(i):
     Users.userReserveSpot(current_user.id,i)
-    Garage.reserveSpot(i)
+    Garages.reserveSpot(i)
     return redirect(url_for("cart"))
 
 @app.route('/cart')
@@ -86,7 +86,7 @@ def reserve(i):
 def cart():
     spot = None
     if current_user.reserved != -1:
-        spot = Garage.getSpotById(current_user.reserved).__dict__
+        spot = Garages.getSpotById(current_user.reserved).__dict__
     return render_template('cart.html', spot=spot)
 
 

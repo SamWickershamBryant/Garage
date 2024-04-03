@@ -35,9 +35,6 @@ class Garage(Base):
     name = Column(String(50))
     location = Column(String(100))
 
-    # Relationship with ParkingSpace
-    spaces = relationship("ParkingSpace", back_populates="garage")
-
 
 class ParkingSpace(Base):
     __tablename__ = "parking_spaces"
@@ -80,7 +77,7 @@ class Users:
         users_as_dict = [user.__dict__ for user in users]
         return users_as_dict
 
-class Garage():
+class Garages():
     def getSpotById(id):
         spot = session.query(ParkingSpace).get(id)
         return spot
