@@ -48,6 +48,9 @@
     </nav>
 
     <div class="container mt-4">
+        {% for garage in garages %}
+        <p>{{garage}}</p>
+        {% endfor %}
         <h1 class="mb-4">MyGarage</h1>
         <div class="row">
             {% for spot in parking_spots %}
