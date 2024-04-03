@@ -80,10 +80,15 @@ class Users:
         users_as_dict = [user.__dict__ for user in users]
         return users_as_dict
 
-class Garages():
+
+class Garages:
     def getSpotById(id):
         spot = session.query(ParkingSpace).get(id)
         return spot
+
+    def getGarageById(id):
+        garage_id = session.query(Garage).get(id)
+        return garage_id
 
     def reserveSpot(id):
         spot = session.query(ParkingSpace).get(id)
@@ -109,3 +114,7 @@ class Garages():
         garages = session.query(Garage).all()
         garages_as_dict = [user.__dict__ for user in garages]
         return garages_as_dict
+
+    def getSpacesbyGarageID(garage_id):
+        spaces = session.query(ParkingSpace).filter_by(garage_id=garage_id).all()
+        return spaces
