@@ -80,8 +80,7 @@ class Users:
         users_as_dict = [user.__dict__ for user in users]
         return users_as_dict
 
-
-class Garages:
+class Garages():
     def getSpotById(id):
         spot = session.query(ParkingSpace).get(id)
         return spot

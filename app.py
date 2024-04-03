@@ -94,8 +94,8 @@ def garage_detail(garage_id):
 @app.route("/reserve/<i>")
 @login_required
 def reserve(i):
-    Users.userReserveSpot(current_user.id, i)
-    Garage.reserveSpot(i)
+    Users.userReserveSpot(current_user.id,i)
+    Garages.reserveSpot(i)
     return redirect(url_for("cart"))
 
 
@@ -104,8 +104,8 @@ def reserve(i):
 def cart():
     spot = None
     if current_user.reserved != -1:
-        spot = Garage.getSpotById(current_user.reserved).__dict__
-    return render_template("cart.html", spot=spot)
+        spot = Garages.getSpotById(current_user.reserved).__dict__
+    return render_template('cart.html', spot=spot)
 
 
 @app.route("/checkout", methods=["POST"])
