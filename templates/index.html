@@ -47,29 +47,25 @@
         </div>
     </nav>
 
+
+    
     <div class="container mt-4">
-        {% for garage in garages %}
-        <p>{{garage}}</p>
-        {% endfor %}
-        <h1 class="mb-4">MyGarage</h1>
+        <h1 class="mb-4">Garages</h1>
         <div class="row">
-            {% for spot in parking_spots %}
+            {% for garage in garages %}
             <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-                <!-- Check if the spot is available -->
-                {% if not spot.reserved %}
-                <a href="/reserve/{{ spot.id }}" class="text-decoration-none">
+                {% if garage.id %}
+                <a href="/garage/{{garage.id}}" class="text-decoration-none">
                     <div class="card spot-card available">
                         <div class="card-body spot-body">
-                            <h5 class="card-title">Spot {{ spot.id }}</h5>
-                            <p class="card-text">$ {{ spot.price }}</p>
+                            <h5 class="card-title">Garage {{ garage.id }}</h5>
                         </div>
                     </div>
                 </a>
                 {% else %}
                 <div class="card spot-card unavailable">
                     <div class="card-body spot-body">
-                        <h5 class="card-title">Spot {{ spot.id }}</h5>
-                        <p class="card-text">$ {{ spot.price }}</p>
+                        <h5 class="card-title">Garage {{ garage.id }}</h5>
                     </div>
                 </div>
                 {% endif %}
