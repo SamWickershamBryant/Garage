@@ -3,21 +3,50 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ garage.name }}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <style>
+        .parking-space {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    
+        .parking-space .btn-reserve {
+            margin-left: 10px;
+        }
+    </style>
+    
+
 </head>
 
 <body>
+    {% include "head.html" %}
     <h1>{{ garage.name }}</h1>
     <p>Location: {{ garage.location }}</p>
 
     <h2>Parking Spaces:</h2>
-    <ul>
-        {% for space in garage.spaces %}
-        <li>Space {{ space.number }} - Price: ${{ space.price }} - Availability: {% if space.availability %}Available{%
-            else %}Not Available{% endif %}</li>
+    <div>
+        {% for space in parking_spaces %}
+        <div class="parking-space">
+            <span>Space {{ space.number }} - Price: ${{'{:,.2f}'.format(space.price)}} - Availability: {% if space.availability %}Available{% else %}Not Available{% endif %}</span>
+            {% if space.availability %}
+            <a href="/parking_space/{{ space.id }}" class="btn btn-primary btn-reserve">Reserve</a>
+            {% endif %}
+        </div>
         {% endfor %}
-    </ul>
+    </div>
 </body>
+
 
 </html>

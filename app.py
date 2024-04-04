@@ -79,6 +79,7 @@ def index():
 
 
 @app.route("/garage/<int:garage_id>")
+#@login_required
 def garage_parking_spaces(garage_id):
     garage = Garages.getGarageById(garage_id)
     if garage is None:
@@ -92,17 +93,21 @@ def garage_parking_spaces(garage_id):
 
 
 @app.route("/parking_space/<int:parking_space_id>")
+#@login_required
 def parking_space_detail(parking_space_id):
     parking_space = Garages.getSpotById(parking_space_id)
+    
     if parking_space is None:
         # Handle parking space not found
         return "404", 404
+    
+    garage = Garages.getGarageById(parking_space.garage_id)
 
-    return render_template("parking_space_detail.html", parking_space=parking_space)
+    return render_template("parkingspace.html", parking_space=parking_space, garage=garage)
 
 
 @app.route("/reserve/<i>")
-@login_required
+#@login_required
 def reserve(i):
     Users.userReserveSpot(current_user.id, i)
     Garages.reserveSpot(i)
@@ -110,7 +115,7 @@ def reserve(i):
 
 
 @app.route("/cart")
-@login_required
+#@login_required
 def cart():
     spot = None
     if current_user.reserved != -1:
@@ -118,8 +123,8 @@ def cart():
     return render_template("cart.html", spot=spot)
 
 
-@app.route("/checkout", methods=["POST"])
-@login_required
+@app.route("/checkout", methods=["GET","POST"])
+#@login_required
 def checkout():
     # Implement logic to process the checkout
     # For example, handle payment, update database, etc.

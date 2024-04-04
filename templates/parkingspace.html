@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ garage.name }}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <style>
+        .checkout-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+    
+        .parking-details {
+            margin-bottom: 20px;
+        }
+    
+        .btn-disabled {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+    </style>
+    
+    
+
+</head>
+
+<body>
+    {% include "head.html" %}
+    <div class="checkout-container">
+        <h1>{{ garage.name }} - Checkout</h1>
+        <p>Location: {{ garage.location }}</p>
+
+        <div class="parking-details">
+            <h2>Parking Space #{{ parking_space.number }}</h2>
+            <p>Price: ${{ '{:,.2f}'.format(parking_space.price) }}</p>
+            <p>Availability: {{ 'Available' if parking_space.availability else 'Not Available' }}</p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <button class="btn btn-success {{ 'btn-disabled' if not parking_space.availability else '' }}" {{ 'disabled=true' if not parking_space.availability else '' }}>Add to Cart</button>
+                <a href="/checkout" class="btn btn-primary {{ 'btn-disabled' if not parking_space.availability else '' }}" {{ 'disabled=true' if not parking_space.availability else '' }}>Checkout</a>
+            </div>
+            <div class="col-md-4 text-right">
+                <a href="/garage/{{garage.id}}" class="btn btn-info">Back to Garages</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+
+</html>
