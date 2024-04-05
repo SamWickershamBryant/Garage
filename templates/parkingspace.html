@@ -50,7 +50,7 @@
         <div class="row">
             <div class="col-md-8">
                 <button class="btn btn-success {{ 'btn-disabled' if not parking_space.availability else '' }}" {{ 'disabled=true' if not parking_space.availability else '' }}>Add to Cart</button>
-                <a href="/checkout" class="btn btn-primary {{ 'btn-disabled' if not parking_space.availability else '' }}" {{ 'disabled=true' if not parking_space.availability else '' }}>Checkout</a>
+                <a href="/create-checkout-session" class="btn btn-primary {{ 'btn-disabled' if not parking_space.availability else '' }}" {{ 'disabled=true' if not parking_space.availability else '' }}>Checkout</a>
             </div>
             <div class="col-md-4 text-right">
                 <a href="/garage/{{garage.id}}" class="btn btn-info">Back to Garages</a>
