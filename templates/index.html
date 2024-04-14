@@ -6,13 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parking Garage Simulator</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <style>
         .spot-card {
             margin: 5px;
+            cursor: pointer; /* Makes it clear that the card is clickable */
+            transition: transform 0.2s; /* Smooth transform on hover */
         }
         .spot-body {
             text-align: center;
@@ -25,33 +26,34 @@
             background-color: #dc3545;
             color: white;
         }
+        .spot-card:hover {
+            transform: scale(1.05); /* Scale effect on hover */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Shadow for depth */
+        }
+        .card-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        .garage-info {
+            font-size: 0.9rem;
+            color: #ddd; /* Light text color for less important info */
+        }
     </style>
 </head>
 <body>
     {% include "head.html" %}
 
-
-    
     <div class="container mt-4">
         <h1 class="mb-4">Garages</h1>
         <div class="row">
             {% for garage in garages %}
             <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-                {% if garage.id %}
-                <a href="/garage/{{garage.id}}" class="text-decoration-none">
-                    <div class="card spot-card available">
-                        <div class="card-body spot-body">
-                            <h5 class="card-title"> {{ garage.name }}</h5>
-                        </div>
-                    </div>
-                </a>
-                {% else %}
-                <div class="card spot-card unavailable">
+                <div class="card spot-card {{ 'available' if garage.id else 'unavailable' }}" onclick="location.href='/garage/{{ garage.id if garage.id else '#' }}'">
                     <div class="card-body spot-body">
-                        <h5 class="card-title"> {{ garage.name }}</h5>
+                        <h5 class="card-title">{{ garage.name }}</h5>
+                        <p class="garage-info">Location: {{ garage.location }} - Spots: {{ garage.spots_available }} available</p>
                     </div>
                 </div>
-                {% endif %}
             </div>
             {% endfor %}
         </div>

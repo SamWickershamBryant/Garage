@@ -20,10 +20,16 @@ login_manager.init_app(app)
 
 login_manager.login_view = "signup"
 
+def getUser():
+    return current_user.username if current_user.is_authenticated else None
+    
+
 
 @login_manager.user_loader
 def load_user(user_id):
     return Users.getUserById(user_id)
+
+
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -71,11 +77,9 @@ def signup():
 def index():
     garages = Garages.getAllGarages()
 
-    user = (
-        current_user.username if current_user.is_authenticated else None
-    )  # TODO change this to their actual name
+    
 
-    return render_template("index.html", garages=garages, user=user)
+    return render_template("index.html", garages=garages, user=getUser())
 
 
 @app.route("/garage/<int:garage_id>")
@@ -88,7 +92,7 @@ def garage_parking_spaces(garage_id):
 
     parking_spaces = Garages.getSpacesbyGarageID(garage_id)
     return render_template(
-        "garage.html", garage=garage, parking_spaces=parking_spaces
+        "garage.html", garage=garage, parking_spaces=parking_spaces, user=getUser()
     )
 
 
@@ -103,7 +107,7 @@ def parking_space_detail(parking_space_id):
     
     garage = Garages.getGarageById(parking_space.garage_id)
 
-    return render_template("parkingspace.html", parking_space=parking_space, garage=garage)
+    return render_template("parkingspace.html", parking_space=parking_space, garage=garage, user=getUser())
 
 
 @app.route("/reserve/<i>")
@@ -120,7 +124,7 @@ def cart():
     spot = None
     if current_user.reserved != -1:
         spot = Garages.getSpotById(current_user.reserved).__dict__
-    return render_template("cart.html", spot=spot)
+    return render_template("cart.html", spot=spot, user=getUser())
 
 
 @app.route("/checkout", methods=["GET","POST"])
