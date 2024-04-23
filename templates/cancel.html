@@ -1,55 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Failed</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f3f3f3;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            text-align: center;
-        }
-        h1 {
-            color: #FF0000;
-            font-size: 2em;
-        }
-        p {
-            font-size: 1.2em;
-            color: #333;
-            margin-top: 20px;
-        }
-        .btn {
-            background-color: #FF0000;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 1em;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .btn:hover {
-            background-color: #CC0000;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Payment Failed</h1>
-        <p>Sorry, your payment was not successful.</p>
-        <a href="/" class="btn">Back to Home</a>
-    </div>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+  <section>
+    <p>Forgot to add something to your cart? Shop around then come back to pay!</p>
+  </section>
+
+  {% endblock %}

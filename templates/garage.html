@@ -1,23 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ garage.name }}</title>
-</head>
+{% block title %} title {% endblock %}
 
-<body>
-    <h1>{{ garage.name }}</h1>
-    <p>Location: {{ garage.location }}</p>
-
-    <h2>Parking Spaces:</h2>
-    <ul>
-        {% for space in garage.spaces %}
-        <li>Space {{ space.number }} - Price: ${{ space.price }} - Availability: {% if space.availability %}Available{%
-            else %}Not Available{% endif %}</li>
-        {% endfor %}
+{% block content %}
+<!-- Garage Information -->
+<div class="garage__container">
+  <div class="garage__info">
+    <div class="garage__name">
+      <h1>{{ garage.name }}</h1>
+    </div>
+    <div class="garage__location">
+      <h2>{{ garage.location }}</h2>
+    </div>
+    <div class="garage__phone">
+      <h3><i class="fa-solid fa-phone"></i> {{ garage.phone_number }}</h3>
+    </div>
+    <div class="garage__maps">
+      <h3><i class="fa-solid fa-location-dot"></i><a href="https://example.com"> Directions</a></h3>
+    </div>
+    <div class="garage__rates">
+      <h4>Daily Rates:</h4>
+    <ul class="list-group">
+      <li class="list-group-item">Weekday: $30</li>
+      <li class="list-group-item">Weekend: $50</li>
     </ul>
-</body>
+    </div>
+    <div class="garage__details">
+    <h5>Amenities:</h5>
+    {% if garage.hours %}
+    <p><i class="fa-regular fa-clock"></i> Open 24hrs</p>
+    {% else %}
+    <p><i class="fa-regular fa-clock"></i> Not open 24hrs</p>
+    {% endif %}
 
-</html>
+    {% if garage.wheelchair_accessible %}
+    <p><i class="fa-solid fa-wheelchair"></i> Wheelchair accessible</p>
+    {% else %}
+    <p>Not wheelchair accessible</p>
+    {% endif %}
+    
+    <p><i class="fa-solid fa-square-parking"></i> {{ garage.service_type }}</p>
+    </div>
+  </div>
+  <div class="garage__form">  
+    <form action="/reserve_spot/{{ garage.id }}" method="POST">
+      <label for="reservation_date">Reservation Date:</label>
+      <input type="date" id="reservation_date" name="reservation_date">
+      <button type="submit">Reserve Spot</button>
+  </form>
+
+  </div>
+</div>
+
+{% endblock %}
