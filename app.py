@@ -18,7 +18,7 @@ app = Flask(__name__, static_url_path="", static_folder="templates")
 app = Flask(__name__, static_url_path='/static')
 app.config["SECRET_KEY"] = "CHANGE_THIS_TO_ENV_VAR"
 app.config['STRIPE_PUBLIC_KEY'] = 'pk_test_51P0z0dCLh6RFSyLp0AONn5FZKjTzYGQj2hnuQTVrY8DYm7fH1sDjl21nX9yK4r2wltposTYnijV0sC86GhQa90xP00ZvcfWQgo'
-app.config['STRIPE_SECRET_KEY'] = 'sk_test_51P0z0dCLh6RFSyLpgMa9qsm0QjzUybS1Yo7Bf3nDR8ZJ1EE0xa0T4FH8eGOLdZPQ1TEmQfXN23wCXG5xkr5DHPsc00ytAKga1q'
+app.config['STRIPE_SECRET_KEY'] = 'CHANGE_TO_SECRET_KEY'
 stripe.api_key = app.config['STRIPE_SECRET_KEY']
 
 YOUR_DOMAIN = 'http://127.0.0.1:5000'
@@ -117,7 +117,6 @@ def garage_list():
 def garage_parking_spaces(garage_id):
     garage = Garages.getGarageById(garage_id)
     if garage is None:
-        # Handle garage not found
         return "404", 404
 
     parking_spaces = Garages.getSpacesbyGarageID(garage_id)
@@ -147,7 +146,6 @@ def reserve(garage_id):
     all_spots = Garages.getAllSpots()
     print("spots: ", all_spots)
     available_spot = Garages.getAvailableSpot(garage_id)
-    #space = Garages.getSpotById(available_spot)
 
     print("Current User:", current_user)  # Print current_user object
     print("Reservation Date:", reservation_date)
@@ -173,64 +171,12 @@ def cart():
         reserved_spot = Garages.getSpotById(reservation_id)
         if reserved_spot:
             spot = reserved_spot.__dict__
-            # session['spot.number'] = space
-            # session['spot.price'] = price
-            # session['reservation_date'] = price
 
 
     return render_template("cart.html", spot=spot, user=getUser())
 
 current_time = datetime.now().hour
 cutoff_hour = 17 
-
-# @app.route('/update_profile', methods=['POST'])
-# @login_required
-# def update_profile():
-#     user_id = current_user.id
-#     current_password = request.form.get('current_password')
-#     new_email = request.form.get('email')
-#     new_username = request.form.get('username')
-#     new_password = request.form.get('password')
-#     confirm_password = request.form.get('confirm_password')
-
-#     users = Users()
-
-#     if not users.verify_password(user_id, current_password):
-#         if new_password != confirm_password:
-#             flash('Passwords do not match. Try again.', 'error')
-#             return redirect('/update_profile')
-#         users.updateUserDetails(user_id, new_email=new_email, new_username=new_username, new_password=new_password)
-#         flash('Profile updated successfully', 'success')
-#     else:
-#         flash('Incorrect current password. Try again.', 'error')
-#     # Redirect or render a response
-#     return render_template('account.html')
-
-# @app.route('/update_profile', methods=['GET','POST'])
-# @login_required
-# def update_profile():
-#     user_id = current_user.id
-#     current_password = request.form.get('current_password')
-#     new_email = request.form.get('email')
-#     new_username = request.form.get('username')
-#     new_password = request.form.get('password')
-#     confirm_password = request.form.get('confirm_password')
-
-#     users = Users()
-
-#     if not users.verify_password(user_id, current_password):
-#         flash('Incorrect current password. Try again.', 'error')
-#         return redirect(url_for('update_profile'))
-
-#     if new_password != confirm_password:
-#         flash('Passwords do not match. Try again.', 'error')
-#         return redirect(url_for('update_profile'))
-
-#     users.updateUserDetails(user_id, new_email=new_email, new_username=new_username, new_password=new_password)
-#     flash('Profile updated successfully', 'success')
-
-#     # Redirect to the account page or any other appropriate page
-#     return redirect(url_for('account'))
 
 @app.route('/update_profile', methods=['GET', 'POST'])
 @login_required
@@ -335,35 +281,6 @@ def stripe_webhook():
     return {}
 
 # Vehicle
-
-# @app.route('/vehicles', methods=['GET', 'POST'])
-# def vehicles():
-#     vehicles_manager = Vehicles()
-
-
-#     if request.method == 'POST':
-#         # Add a new vehicle
-#         vehicle_model = request.form['vehicle_model']
-#         license_plate = request.form['license_plate']
-#         user_id = current_user.id 
-#         new_vehicle = Vehicles.createVehicle(vehicle_model, license_plate, user_id)
-#         if new_vehicle:
-#             return redirect(url_for('vehicles'))
-#         else:
-#             return "Failed to add vehicle"  
-
-#     if request.method == 'GET':
-#         if 'delete_vehicle_id' in request.args:
-#             # Delete a vehicle
-#             vehicle_id = int(request.args['delete_vehicle_id'])
-#             if vehicles_manager.deleteVehicle(vehicle_id):
-#                 return redirect(url_for('vehicles'))
-#             else:
-#                 return "Vehicle not found"  
-
-#     # Get all vehicles
-#     vehicles = vehicles_manager.getAllVehicles()
-#     return render_template('view_vehicles.html', vehicles=vehicles)
 
 @app.route('/vehicles', methods=['GET', 'POST'])
 def vehicles():
