@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MyGarage - Home{% endblock %}</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://kit.fontawesome.com/6e8f0dde74.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+  <header>
+      <!-- Navbar -->
+      <nav class="navbar fixed-top navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="/" style="font-size: 35px;"><i class="fa-solid fa-car"></i>MyGarage</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="/" style="font-size: 23px;">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/allgarages" style="font-size: 23px;">Garages</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/cart" style="font-size: 23px;">Cart</a>
+            </li>
+            {% if current_user.is_authenticated %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 23px;">
+                Welcome, {{ current_user.username }}
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item" href="/vehicles">Vehicles</a>
+                <a class="dropdown-item" href="/allgarages">Garages</a>
+                <a class="dropdown-item" href="#">Reservations</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/update_profile">Account</a>
+                <a class="dropdown-item" href="/logout">Logout</a>
+              </div>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="/login" style="font-size: 23px;">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/signup" style="font-size: 23px;">Sign Up</a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for catagory, message in messages %}
+      {% if catagory == 'error' %}
+      <div class="alert alert-danger alter-dismissable fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% else %}
+      <div class="alert alert-success alter-dismissable fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endif %}
+      {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+
+  {% block content %}
+
+  {% endblock %}
+
+
+<footer>
+  <div class="footer__container">
+      <div class="footer__links">
+          <div class="footer__links--wrapper">
+              <div class="footer__link--items">
+                  <h2>About Us</h2>
+                  <a href="/">How it works</a>
+                  <a href="/">Group Members</a>
+              </div>
+          </div>          
+      </div>
+      <div class="social__media">
+          <div class="social__media--wrap">
+              <div class="footer__logo">
+                  <a href="/" id="footer__logo"><i class="fas fa-car"></i>MyGarage</a>
+              </div>
+              <p class="website__rights">© MyGarage 2024. All rights reserved</p>
+              <div class="social__icons">
+                  <a href="/" class="social__icon--link" target="_blank"><i class="fab fa-github"></i></a>
+              </div>
+          </div>
+      </div>
+  </div>
+</footer>
+
+  <script>
+      function highlightSpot(spotId) {
+          var spot = document.getElementById('Space' + spotId);
+          spot.classList.add('highlight');
+      }
+
+      function removeHighlight(spotId) {
+          var spot = document.getElementById('Space' + spotId);
+          spot.classList.remove('highlight');
+      }
+  </script>
+    
+<!-- Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<!-- jQuery and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+
+<script src="
+https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js
+"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</body>
+</html>

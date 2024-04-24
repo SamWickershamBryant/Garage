@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Garages{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+  <h1 class="mb-4">Garages:</h1>
+  <div class="row">
+      {% for garage in garages %}
+      <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+          <div class="card spot-card {{ 'available' if garage.id else 'unavailable' }}" onclick="location.href='/garage/{{ garage.id if garage.id else '#' }}'">
+              <div class="card-body spot-body">
+                  <h5 class="card-title">{{ garage.name }}</h5>
+                  <p class="garage-info">Location: {{ garage.location }} - Spots: {{ garage.spots_available }} available</p>
+              </div>
+          </div>
+      </div>
+      {% endfor %}
+  </div>
+</div>
+
+{% endblock %}
+
+

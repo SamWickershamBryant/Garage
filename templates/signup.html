@@ -1,74 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyGarage - Sign Up</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</head>
+{% block title %}Garages{% endblock %}
 
-<body>
-    {% include "head.html" %}
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="login-container col-lg-4 col-md-6 col-sm-8 col-xs-12">
-                <div class="login-title text-center">
-                    <h2><span>MyGarage</span></h2>
-                </div>
-                <div class="login-content">
-                    <div class="login-header">
-                        <h3>Sign up for MyGarage</h3>
-                    </div>
-                    <div class="login-body">
-                        <form role="form" action="/signup" method="post" class="login-form">
-                            {{ form.hidden_tag() }}
-                            <div class="form-group">
-                                <!-- Email Field -->
-                                <div class="pos-r">
-                                    <input type="email" id="form-email" name="email" placeholder="Email..."
-                                        class="form-control">
-                                    <i class="fa fa-envelope"></i>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <!-- Username Field -->
-                                <div class="pos-r">
-                                    <input type="text" id="form-username" name="username" placeholder="Username..."
-                                        class="form-control">
-                                    <i class="fa fa-user"></i>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <!-- Password Fields -->
-                                <div class="pos-r">
-                                    <input type="password" id="form-password" name="password" placeholder="Password..."
-                                        class="form-control">
-                                    <i class="fa fa-lock"></i>
-                                </div>
-                                <div class="pos-r">
-                                    <input type="password" id="form-confirm-password" name="confirmPassword"
-                                        placeholder="Confirm Password..." class="form-control">
-                                    <i class="fa fa-lock"></i>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <!-- Submit Button -->
-                                <button type="submit" class="btn btn-primary form-control">Sign up</button>
-                            </div>
-                        </form>
-                    </div><!-- end login-body -->
-                </div><!-- end login-content -->
-                <div class="login-footer text-center template">
-                    <!-- Sign In Link -->
-                    <h5>Already have an account? <a href="/login" class="bold">Sign in</a></h5>
-                </div>
-            </div><!-- end login-container -->
+{% block content %}
+<div class="login_container">
+    <div class="login_body">
+    <div class="login_header">
+        <h1>Sign up for MyGarage</h1>
+    </div>
+        <form role="form" action="/signup" method="post" class="login-form">
+            {{ form.hidden_tag() }}
+        <div class="form-group">
+          <label for="exampleInputEmail1"><i class="fa fa-envelope"></i> Email address:</label>
+          <input type="email" id="form-email" name="email" class="form-control" placeholder="Enter email...">
         </div>
-    </div><!-- end container -->
-</body>
+        <div class="form-group">
+            <label for="exampleInputEmail1"><i class="fa fa-user"></i> Username:</label>
+            <input type="username" id="form-username" name="username" class="form-control" placeholder="Enter username...">
+          </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1"><i class="fa fa-lock"></i> Password:</label>
+            <input type="password" id="form-password" name="password" class="form-control" placeholder="Password...">
 
-</html>
+            <label for="exampleInputPassword2"><i class="fa fa-lock"></i> Confirm password:</label>
+            <input type="password" id="form-confirm-password" name="confirmPassword" class="form-control" placeholder="Confirm password...">
+        </div>
+        <div class="form-group text-right">
+            <!-- Forgot Password Link -->
+            <a href="#" class="bold">Forgot password?</a>
+        </div>
+        <div class="form-group">
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary form-control">Sign up</button>
+        </div>
+      </form>
+      <h5>Already have an account? <a href="/login" class="bold">Login</a></h5>
+    </div>
+</div>
+    {% endblock %}

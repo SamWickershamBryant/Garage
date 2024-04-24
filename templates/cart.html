@@ -1,46 +1,43 @@
-<!-- cart.html -->
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Parking Garage Simulator</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-        <style>
-            .spot-card {
-                margin: 5px;
-            }
-            .spot-body {
-                text-align: center;
-            }
-            .available {
-                background-color: #28a745;
-                color: white;
-            }
-            .unavailable {
-                background-color: #dc3545;
-                color: white;
-            }
-        </style>
-    </head>
-<body>
-    {% include "head.html" %}
-    <h1>Cart</h1>
-    <!-- Display cart contents here -->
+{% extends 'base.html' %}
+
+{% block title %}Garages{% endblock %}
+
+{% block content %}
+<div class="cart_container">
+    <div class="cart_head">
+        <h1>Cart</h1>
+    </div>
+    <!-- Display cart -->
     {% if not spot %}
     <p>Your cart is currently empty.</p>
-    
     {% else %}
-    <!-- Add checkout button -->
-    <p>You have reserved spot #{{spot.id}} for {{'${:,.2f}'.format(spot.price)}}</p>
-    <form action="{{ url_for('checkout') }}" method="post">
-        <button type="submit">Checkout</button>
+    <div class="card text-center">
+        <div class="card-header">
+            Reserved Spot
+        </div>
+    <div class="card-body">
+        <h5 class="card-title">Spot numer: {{ spot.number }}</h5>
+        <p class="card-text">Reservation Date: {{ spot.reservation_date }}</p>
+        <p class="card-text">Price: ${{ spot.price }}.00</p>
+    </div>
+    </div>
+    {% endif %}
+    {% if spot.price == 30 %}
+    <form action="/create_checkout_session" method="POST">
+        <input type="hidden" name="product_id" value="prod_PyXS1qmP2S8xev">
+        <input type="hidden" name="price_id" value="price_1P8aNdCLh6RFSyLpLEtRt4Xl">
+        <button type="submit" class="btn btn-primary">Checkout</button>
+    </form>
+    {% else %}
+    <form action="/create_checkout_session" method="POST">
+        <input type="hidden" name="product_id" value="prod_PyXSkiKXnlacTs">
+        <input type="hidden" name="price_id" value="price_1P8aNzCLh6RFSyLpS02m5kPr">
+        <button type="submit" class="btn btn-primary">Checkout</button>
     </form>
     {% endif %}
-</body>
-</html>
+</div>
+{% endblock %}
+
+
+
+

@@ -24,3 +24,9 @@ class RegisterForm(FlaskForm):
         "Confirm Password", validators=[DataRequired(), Length(max=100)]
     )
     submit = SubmitField("Register")
+
+    
+class VehicleForm(FlaskForm):
+    vehicle_model = StringField("Model", validators=[DataRequired(), Length(max=20)])
+    license_plate = StringField("License Plate", validators=[DataRequired(), Length(max=100)])
+    submit = SubmitField("Login")

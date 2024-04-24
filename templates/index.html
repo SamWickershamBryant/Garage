@@ -1,63 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parking Garage Simulator</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <style>
-        .spot-card {
-            margin: 5px;
-            cursor: pointer; /* Makes it clear that the card is clickable */
-            transition: transform 0.2s; /* Smooth transform on hover */
-        }
-        .spot-body {
-            text-align: center;
-        }
-        .available {
-            background-color: #28a745;
-            color: white;
-        }
-        .unavailable {
-            background-color: #dc3545;
-            color: white;
-        }
-        .spot-card:hover {
-            transform: scale(1.05); /* Scale effect on hover */
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Shadow for depth */
-        }
-        .card-title {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
-        .garage-info {
-            font-size: 0.9rem;
-            color: #ddd; /* Light text color for less important info */
-        }
-    </style>
-</head>
-<body>
-    {% include "head.html" %}
+{% extends 'base.html' %}
 
-    <div class="container mt-4">
-        <h1 class="mb-4">Garages</h1>
-        <div class="row">
-            {% for garage in garages %}
-            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-                <div class="card spot-card {{ 'available' if garage.id else 'unavailable' }}" onclick="location.href='/garage/{{ garage.id if garage.id else '#' }}'">
-                    <div class="card-body spot-body">
-                        <h5 class="card-title">{{ garage.name }}</h5>
-                        <p class="garage-info">Location: {{ garage.location }} - Spots: {{ garage.spots_available }} available</p>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+
+<div class="main__container">
+  <div class="main__content">
+    <h1>Reserve parking now</h1>
+        <div class="search__container">
+            <form id="searchForm" action="/search" method="GET">
+                <input type="text" id="locationInput" name="location" placeholder="Enter location">
+                <input type="hidden" id="hiddenLocation" name="hiddenLocation">
+                <button class="btn btn-primary" type="submit">Get Started</button>
+            </form>
         </div>
+  </div>
+</div>
+
+
+<!-- Services -->
+<div class="main__container">
+    <h2>Daily Parking Rates</h2>
+    <div class="services__container">
+    <div class="card text-center">
+        <div class="card-header">
+          Weekday Parking
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Park for $30/Day</h5>
+          <p class="card-text">Search for a garage near you.</p>
+        </div>
+        <div class="card-footer text-muted">
+          {% if current_user.is_authenticated %}
+        </br>
+          {% else %}
+          <a href="/login" class="btn btn-primary">Login to get started</a>
+          {% endif %}
+        </div>
+      </div>
+      <div class="card text-center">
+        <div class="card-header">
+          Weekend Parking
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Park for $50/Day</h5>
+          <p class="card-text">Search for a garage near you.</p>
+        </div>
+        <div class="card-footer text-muted">
+          {% if current_user.is_authenticated %}
+        </br>
+          {% else %}
+          <a href="/login" class="btn btn-primary">Login to get started</a>
+          {% endif %}
+        </div>
+      </div>
     </div>
-    
-</body>
-</html>
+</div>
+{% endblock %}
