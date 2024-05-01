@@ -14,7 +14,7 @@ def populateSpots():
     for i in range(10):
         phone_number = fake.phone_number()
         hours = fake.boolean(chance_of_getting_true=50)
-        wheelchair_accessible = fake.boolean(chance_of_getting_true=50) 
+        wheelchair_accessible = fake.boolean(chance_of_getting_true=75) 
         service_type = random.choice(['self-service', 'valet'])  
 
 
