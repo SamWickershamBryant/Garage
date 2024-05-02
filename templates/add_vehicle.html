@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}MyVehicles{% endblock %}
+
+{% block content %}
+
+<div class="vehicle_container">
+    <div class="card text-center" style="width: 100%";>
+        <div class="card-header">
+          <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+              <a class="nav-link" href="/vehicles/default">Default vehicle</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/vehicles/add">Add vehicle</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/vehicles">Manage vehicles</a>
+              </li>
+          </ul>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title" style="padding-top: 20px;">Vehicle information</h5>
+          <form action="/vehicles" method="POST">
+            <div class="form-group">
+                <label for="vehicle_model">Vehicle Model:</label>
+                <input type="text" class="form-control" id="vehicle_model" name="vehicle_model" placeholder="Model" required>
+            </div>
+            <div class="form-group">
+                <label for="license_plate">License Plate:</label>
+                <input type="text" class="form-control" id="license_plate" name="license_plate" placeholder="XXX-XXXX" required>
+            </div>
+            <p class="card-text" style="font-size: 20px; padding-top: 30px;">Make sure your license plate is accurate. This is how we verify your reservation!</p>
+            <button type="submit" class="btn btn-primary">Add Vehicle</button>
+        </form>
+        </div>
+      </div>
+</div>
+
+
+{% endblock %}

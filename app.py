@@ -3,7 +3,7 @@ import stripe, os
 from datetime import datetime
 from forms import LoginForm, RegisterForm
 from werkzeug.security import generate_password_hash, check_password_hash
-from models import Garages, ParkingSpace, Vehicles, session
+from models import Garages, ParkingSpace, Vehicles, Reservations, session
 from flask_login import (
     LoginManager,
     login_user,
@@ -18,7 +18,7 @@ app = Flask(__name__, static_url_path="", static_folder="templates")
 app = Flask(__name__, static_url_path='/static')
 app.config["SECRET_KEY"] = "CHANGE_THIS_TO_ENV_VAR"
 app.config['STRIPE_PUBLIC_KEY'] = 'pk_test_51P0z0dCLh6RFSyLp0AONn5FZKjTzYGQj2hnuQTVrY8DYm7fH1sDjl21nX9yK4r2wltposTYnijV0sC86GhQa90xP00ZvcfWQgo'
-app.config['STRIPE_SECRET_KEY'] = 'CHANGE_TO_SECRET_KEY'
+app.config['STRIPE_SECRET_KEY'] = 'sk_test_51P0z0dCLh6RFSyLpgMa9qsm0QjzUybS1Yo7Bf3nDR8ZJ1EE0xa0T4FH8eGOLdZPQ1TEmQfXN23wCXG5xkr5DHPsc00ytAKga1q'
 stripe.api_key = app.config['STRIPE_SECRET_KEY']
 
 YOUR_DOMAIN = 'http://127.0.0.1:5000'
@@ -95,6 +95,7 @@ def signup():
 
 
 @app.route('/search', methods=['GET'])
+@login_required
 def search():
     location = request.args.get('location')
     print("Location:", location)
@@ -102,15 +103,6 @@ def search():
     search_results = Garages.searchGaragesByLocation(location)
     return render_template('garages_list.html', search_results=search_results)
     
-
-
-@app.route("/garages_list")
-@login_required
-def garage_list():
-    garages = Garages.getAllGarages()
-
-    return render_template("garages_list.html", garages=garages)
-
 
 @app.route("/garage/<int:garage_id>")
 @login_required
@@ -124,56 +116,20 @@ def garage_parking_spaces(garage_id):
         "garage.html", garage=garage, parking_spaces=parking_spaces, user=getUser()
     )
 
-
-@app.route("/parking_space/<int:parking_space_id>")
-@login_required
-def parking_space_detail(parking_space_id):
-    parking_space = Garages.getSpotById(parking_space_id)
-    
-    if parking_space is None:
-        # Handle parking space not found
-        return "404", 404
-    
-    garage = Garages.getGarageById(parking_space.garage_id)
-
-    return render_template("parkingspace.html", parking_space=parking_space, garage=garage, user=getUser())
-
-
 @app.route("/reserve_spot/<int:garage_id>", methods=['GET','POST'])
 @login_required
 def reserve(garage_id):
     reservation_date = request.form.get("reservation_date")
-    all_spots = Garages.getAllSpots()
-    print("spots: ", all_spots)
     available_spot = Garages.getAvailableSpot(garage_id)
 
-    print("Current User:", current_user)  # Print current_user object
-    print("Reservation Date:", reservation_date)
-    print("Reserved Spot:", available_spot)
-
     reserved_spot = Garages.reserveSpot(available_spot, reservation_date)
-    print("Reserved Spot:", reserved_spot)
     if reserved_spot:
         Users.userReserveSpot(current_user.id, reserved_spot.id)
-        print("Reserved Spot:", reserved_spot)
     else:
         flash("Failed to reserve spot.", "error")
-
+        
     return redirect(url_for("cart"))
 
-
-@app.route("/cart")
-@login_required
-def cart():
-    spot = None
-    reservation_id = current_user.reserved
-    if reservation_id != -1:
-        reserved_spot = Garages.getSpotById(reservation_id)
-        if reserved_spot:
-            spot = reserved_spot.__dict__
-
-
-    return render_template("cart.html", spot=spot, user=getUser())
 
 current_time = datetime.now().hour
 cutoff_hour = 17 
@@ -182,11 +138,10 @@ cutoff_hour = 17
 @login_required
 def update_profile():
     if request.method == 'GET':
-        # Fetch current user's details
+
         current_email = current_user.email
         current_username = current_user.username
         
-        # Render the form with pre-filled values
         return render_template('update_profile.html', email=current_email, username=current_username)
     
     elif request.method == 'POST':
@@ -196,6 +151,7 @@ def update_profile():
         new_username = request.form.get('username')
         new_password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
+        new_hashedpass = generate_password_hash(new_password, method="pbkdf2:sha256")
 
         users = Users()
 
@@ -207,24 +163,47 @@ def update_profile():
             flash('Passwords do not match. Try again.', 'error')
             return redirect(url_for('update_profile'))
 
-        users.updateUserDetails(user_id, new_email=new_email, new_username=new_username, new_password=new_password)
+        users.updateUserDetails(user_id, new_email=new_email, new_username=new_username, new_password=new_hashedpass)
         flash('Profile updated successfully', 'success')
 
-        # Redirect to the account page or any other appropriate page
         return redirect(url_for('account'))
 
 
-#Payment routes
+# Checkout
 
-@app.route('/pricing', methods=['GET', 'POST'])
-def pricing():    
-    return render_template('pricing.html')
+@app.route("/cart")
+@login_required
+def cart():
+    vehicles = Vehicles.getAllVehicles(current_user.id)
+    # if user cart is empty
+    spot = None
+    garage = None
+    reservation_id = current_user.reserved
+    if reservation_id != -1:
+        reserved_spot = Garages.getSpotById(reservation_id)
+        if reserved_spot:
+            spot = reserved_spot.__dict__
+            garage = reserved_spot.garage
+
+
+    return render_template("cart.html", spot=spot, user=getUser(), vehicles=vehicles, garage=garage)
+
 
 @app.route('/create_checkout_session', methods=['POST'])
 @login_required
 def create_checkout_session():
     product_id = request.form.get('product_id')
     price_id = request.form.get('price_id')
+    spot_id = request.form.get('spot_id')
+    spot_num = request.form.get('spot_num')
+    garage_name = request.form.get('garage_name')
+    vehicle_id = request.form.get('vehicle')
+    vehicle_model = request.form.get('vehicle_model')
+    vehicle_plate = request.form.get('vehicle_plate')
+    date_str = request.form.get('reservation_date')
+    date = datetime.strptime(date_str, '%Y-%m-%d').date()
+    purchase_date = datetime.now().date()
+    quantity = 1
 
     session = stripe.checkout.Session.create(
         payment_method_types=['card'],
@@ -238,12 +217,24 @@ def create_checkout_session():
         success_url=url_for('thanks', _external=True),
         cancel_url=url_for('index', _external=True),
     )
-    
+    try:
+        reservation_created = Reservations.createReservation(current_user.id, garage_name, spot_id, spot_num, vehicle_id, vehicle_model, vehicle_plate, date, purchase_date)
+        if reservation_created:
+            flash("Reservation created", "success")
+            session.commit()
+        
+    except Exception as e:
+        flash(f"Error creating reservation: {str(e)}", "error")
+
     return redirect(session.url, code=303)
 
 
 @app.route('/thanks')
+@login_required
 def thanks():
+    current_user.reserved = -1
+    session.commit()
+
     return render_template('thanks.html')
 
 @app.route('/stripe_webhook', methods=['POST'])
@@ -263,15 +254,13 @@ def stripe_webhook():
             payload, sig_header, endpoint_secret
         )
     except ValueError as e:
-        # Invalid payload
         print('INVALID PAYLOAD')
         return {}, 400
     except stripe.error.SignatureVerificationError as e:
-        # Invalid signature
         print('INVALID SIGNATURE')
         return {}, 400
 
-    # Handle the checkout.session.completed event
+    # if checkout completed
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
         print(session)
@@ -280,9 +269,33 @@ def stripe_webhook():
 
     return {}
 
+@app.route("/reservation_history")
+@login_required
+def reservation_history():
+    reservations = Reservations.getReservationsById(current_user.id)
+
+    return render_template("reservations.html", reservations=reservations)
+
 # Vehicle
 
+@app.route("/set_current_vehicle/<int:vehicle_id>", methods=['POST'])
+@login_required
+def set_current_vehicle(vehicle_id):
+    vehicle = Vehicles.getVehicleById(vehicle_id)
+    if vehicle:
+        current_user.current_vehicle = vehicle_id
+        for user_vehicle in current_user.vehicles:
+            user_vehicle.current_vehicle = False
+
+        vehicle.current_vehicle = True
+        session.commit()
+    else:
+        flash("Vehicle not found.", "error")
+    
+    return redirect(url_for("vehicles"))
+
 @app.route('/vehicles', methods=['GET', 'POST'])
+@login_required
 def vehicles():
     if request.method == 'POST':
         # Add a new vehicle
@@ -305,11 +318,34 @@ def vehicles():
                 return "Vehicle not found"  
 
     # Get all vehicles
-    vehicles = Vehicles.getAllVehicles()
+    vehicles = Vehicles.getAllVehicles(current_user.id)
     return render_template('view_vehicles.html', vehicles=vehicles)
 
 
+@app.route('/vehicles/add', methods=['GET', 'POST'])
+@login_required
+def add_vehicle():
+
+    return render_template('add_vehicle.html')
+
+
+@app.route('/vehicles/default', methods=['GET'])
+@login_required
+def default_vehicle():
+    current_vehicle = Vehicles.getCurrentVehicleByUserId(current_user.id)
+    if current_vehicle:
+        vehicle_model = current_vehicle.vehicle_model
+        vehicle_plate = current_vehicle.license_plate
+    else:
+        current_vehicle = None
+        default_vehicle = None
+        vehicle_model = None
+        vehicle_plate = None
+    return render_template('default_vehicle.html', current_vehicle=current_vehicle, vehicle_model=vehicle_model, vehicle_plate=vehicle_plate)
+
+
 @app.route("/allgarages")
+@login_required
 def allGarages():
     garages = Garages.getAllGarages()
 

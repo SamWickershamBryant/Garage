@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}MyVehicles{% endblock %}
+
+{% block content %}
+
+<div class="vehicle_container">
+    <div class="card" style="width: 100%;">
+        <div class="card-header">
+          <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" href="/vehicles/default">Default vehicle</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/vehicles/add">Add vehicle</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/vehicles">Manage vehicles</a>
+              </li>
+          </ul>
+        </div>
+        <div class="card-body" style="height: 300px;">
+            <h5 class="card-title" style="font-size: 30px; margin-top: 30px;" >Vehicle used for reservations:</h5>
+            {% if current_vehicle %}
+            <li class="list-group-item" style="font-size: 30px; margin-top: 50px;">Model: <strong>{{ vehicle_model }}</strong></li>
+            <li class="list-group-item"  style="font-size: 30px;">License plate: <strong>{{ current_vehicle.license_plate }}</strong></li>
+            {% endif %}
+            {% if current_vehicle == None %}
+            <li class="list-group-item"  style="font-size: 30px;"><strong>Please add your vehicle information</strong></li>
+            {% endif %}
+
+        </div>
+      </div>
+</div>
+
+
+
+{% endblock %}

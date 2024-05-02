@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Your Reservations{% endblock %}
+
+{% block content %}
+
+<div class="reservation__container__header">
+    <h1>Your Reservations</h1>
+</div>
+<div class="reservation__container">
+        {% if reservations %}
+        {% for reservation in reservations %}
+        <div class="card" style="width: 800px;">
+            <div class="card-header" style="display: flex; justify-content: space-between;">
+            Reservation Date: <strong>{{ reservation.reservation_date }}</strong>
+            </div>
+            <div class="card-body">
+                <p class="card-text" style="font-size: 25px;">Location: <strong>{{ reservation.garage_name }}</strong></p>
+            <p class="card-text" style="font-size: 25px;">Spot number: <strong>{{ reservation.spot_num }}</strong></p>
+            <p class="card-text" style="font-size: 25px;">For vehicle: <strong>{{ reservation.vehicle_model }}-{{ reservation.vehicle_plate }}</strong></p>
+            </div>
+            <div class="card-footer">
+                Purchase date: {{ reservation.purchase_date }}
+            </div>
+        </div>
+        {% else %}
+        <div class="reservation_container" style="height: 100vh;">
+            <div class="card-body">
+                <p class="card-text" style="font-size: 25px;"><strong>No reservation history.</strong></p>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+{% endblock %}

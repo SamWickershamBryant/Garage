@@ -4,18 +4,20 @@ from sqlalchemy import (
     Integer,
     String,
     ForeignKey,
+    ForeignKeyConstraint,
     Boolean,
     Date,
     select,
     update,
     delete,
     func,
+    Table
 )
-
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy.orm import sessionmaker, relationship, joinedload
 from flask_login import UserMixin
 from datetime import datetime
+
 
 
 engine = create_engine("sqlite:///data.db")
@@ -29,7 +31,9 @@ class User(Base, UserMixin):
     username = Column(String(20), unique=True)
     password = Column(String(256), unique=True)
     reserved = Column(Integer, default=-1)
+
     vehicles = relationship("Vehicle", back_populates="owner")
+    reservations = relationship("Reservation", back_populates="user")
 
 
 class Garage(Base):
@@ -42,26 +46,53 @@ class Garage(Base):
     wheelchair_accessible = Column(Boolean, default=False)
     service_type = Column(String(20))
 
+    parking_spaces = relationship("ParkingSpace", back_populates="garage")
+    reservations = relationship("Reservation", back_populates="garage")
+
 class ParkingSpace(Base):
     __tablename__ = "parking_spaces"
     id = Column(Integer, primary_key=True)
     number = Column(Integer)
     price = Column(Integer)
     availability = Column(Boolean)
-    garage_id = Column(Integer)
+    garage_id = Column(Integer, ForeignKey('garages.id'))
     reservation_date = Column(Date)
+
+    garage = relationship("Garage", back_populates="parking_spaces")
+    reservations = relationship("Reservation", back_populates="spot", foreign_keys="[Reservation.spot_id]")
 
 class Vehicle(Base):
     __tablename__ = "vehicles"
     id = Column(Integer, primary_key=True)
     vehicle_model = Column(String(20))
-    license_plate = Column(String(100))
+    license_plate = Column(String(10))
     user_id = Column(Integer, ForeignKey('users.id'))
+    current_vehicle = Column(Boolean, default=False)
+
     owner = relationship("User", back_populates="vehicles")
+    reservations = relationship("Reservation", back_populates="vehicle")
+
 
 class Reservation(Base):
     __tablename__ = "reservations"
     id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    garage_name = Column(String, ForeignKey('garages.name'))
+    spot_id = Column(Integer, ForeignKey('parking_spaces.id'))
+    vehicle_id = Column(Integer, ForeignKey('vehicles.id'))
+    reservation_date = Column(Date)
+    purchase_date = Column(Date)
+
+    vehicle_model = Column(String(20))
+    vehicle_plate = Column(String(10))
+    spot_num = Column(Integer)
+
+    user = relationship("User", back_populates="reservations")
+    garage = relationship("Garage", back_populates="reservations")
+    vehicle = relationship("Vehicle", back_populates="reservations")
+    spot = relationship("ParkingSpace", back_populates="reservations")
+
+    
 
 
 Base.metadata.create_all(engine)
@@ -108,16 +139,16 @@ class Users:
         users_as_dict = [user.__dict__ for user in users]
         return users_as_dict
     
-    def updateUserDetails(self, user_id, new_email=None, new_username=None, new_password=None):
+    def updateUserDetails(self, user_id, new_email, new_username, new_password):
         user = session.query(User).get(user_id)
         
-        if new_email is not None:
+        if new_email:
             user.email = new_email
         
-        if new_username is not None:
+        if new_username:
             user.username = new_username
         
-        if new_password is not None:
+        if new_password:
             user.password = new_password
 
         session.commit()
@@ -209,6 +240,13 @@ class Vehicles:
         vehicle_id = session.query(Vehicle).get(id)
         return vehicle_id
     
+    def getCurrentVehicleByUserId(user_id):
+        current_vehicle = session.query(Vehicle)\
+            .filter(Vehicle.user_id == user_id, Vehicle.current_vehicle == True)\
+            .options(joinedload(Vehicle.owner))\
+            .first()
+        return current_vehicle
+    
     def createVehicle(vehicle_model, license_plate, user_id):
         try:
             vehicle = Vehicle(vehicle_model=vehicle_model, license_plate=license_plate, user_id=user_id)
@@ -229,7 +267,28 @@ class Vehicles:
             session.close()
             return False
         
-    def getAllVehicles():
-        vehicles = session.query(Vehicle).all()
+    def getAllVehicles(user_id):
+        vehicles = session.query(Vehicle).filter(Vehicle.user_id == user_id).all()
         vehicles_as_dict = [vehicle.__dict__ for vehicle in vehicles]
         return vehicles_as_dict
+    
+
+
+class Reservations:        
+    def createReservation(user_id, garage_name, spot_id, spot_num, vehicle_id, vehicle_model, vehicle_plate, date, purchase_date):
+        try:
+            res = Reservation(user_id=user_id, garage_name=garage_name, spot_id=spot_id, spot_num=spot_num, vehicle_id=vehicle_id, vehicle_model=vehicle_model, vehicle_plate=vehicle_plate, reservation_date=date, purchase_date=purchase_date)
+            session.add(res)
+            session.commit()
+            return True
+        except Exception as e:
+            return False
+
+
+    def getReservationsById(user_id):
+        reservations = session.query(Reservation) \
+                          .options(joinedload(Reservation.vehicle), joinedload(Reservation.spot)) \
+                          .filter_by(user_id=user_id) \
+                          .all()
+        return reservations
+
