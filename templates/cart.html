@@ -29,6 +29,10 @@
             <input type="hidden" name="garage_name" value="{{ garage.name }}">
             <input type="hidden" name="reservation_date" value="{{ spot.reservation_date }}">
             <label for="vehicle" style="display: inline-block; margin-right: 10px; font-size: 20px;">Reservation for:</label>
+            {% if current_vehicle == None %}
+            <p style="display: inline-block; margin-right: 10px; font-size: 20px; color: red;"><strong>Please set your vehicle for reservation in your vehicles page before checkout.</strong></p>
+            <input type="submit" class="btn btn-primary" value="Checkout" disabled>
+            {% else %}
             {% for vehicle in vehicles %}
                 {% if vehicle.current_vehicle %}
                 <p style="display: inline-block; margin-right: 10px; font-size: 20px;">{{ vehicle.vehicle_model }} - {{ vehicle.license_plate }}</p>
@@ -37,7 +41,7 @@
                 <input type="hidden" name="vehicle_plate" value="{{ vehicle.license_plate }}"> 
                 {% endif %}
             {% endfor %}
-
+            
             {% if spot.price == 30 %}
             <input type="hidden" name="product_id" value="prod_PyXS1qmP2S8xev">
             <input type="hidden" name="price_id" value="price_1P8aNdCLh6RFSyLpLEtRt4Xl">
@@ -47,6 +51,17 @@
             {% endif %}
             <input type="submit" class="btn btn-primary" value="Checkout">
         </form>
+        {% endif %}
+        <div class="button-container">
+            <form action="/empty_cart" method="POST">
+                <button type="empty">Empty Cart</button>
+            </form>
+            <form action="/allgarages" method="GET">
+                <button type="empty">Back to Garages</button>
+            </form>
+        </div>
+        
+        
     </div>
     {% endif %}
 </div>

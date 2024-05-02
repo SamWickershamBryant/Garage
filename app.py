@@ -175,6 +175,7 @@ def update_profile():
 @login_required
 def cart():
     vehicles = Vehicles.getAllVehicles(current_user.id)
+    current_vehicle = Vehicles.getCurrentVehicleByUserId(current_user.id)
     # if user cart is empty
     spot = None
     garage = None
@@ -186,7 +187,7 @@ def cart():
             garage = reserved_spot.garage
 
 
-    return render_template("cart.html", spot=spot, user=getUser(), vehicles=vehicles, garage=garage)
+    return render_template("cart.html", spot=spot, user=getUser(), vehicles=vehicles, current_vehicle=current_vehicle, garage=garage)
 
 
 @app.route('/create_checkout_session', methods=['POST'])

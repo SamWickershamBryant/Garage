@@ -819,3 +819,31 @@ button[type="set"] {
 button[type="set"]:hover {
     background-color: #4c7fb5; 
 }
+.button-container {
+    overflow: hidden;
+}
+.button-container form {
+    float: left; 
+    margin-right: 10px;
+}
+.button-container form:last-child {
+    float: right;
+}
+button[type="empty"] {
+    display: inline-block; 
+    vertical-align: center;
+    margin: 0;
+    width: 200px; 
+    
+    font-size: 20px;
+    background-color: #fff; 
+    color: #000000; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    
+}
+button[type="empty"]:hover {
+    background-color: #ffffff; 
+    color: #1c35c8; 
+}
