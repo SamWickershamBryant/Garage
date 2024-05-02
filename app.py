@@ -215,7 +215,7 @@ def create_checkout_session():
         ],
         mode='payment',
         success_url=url_for('thanks', _external=True),
-        cancel_url=url_for('index', _external=True),
+        cancel_url=url_for('thanks', _external=True),
     )
     try:
         reservation_created = Reservations.createReservation(current_user.id, garage_name, spot_id, spot_num, vehicle_id, vehicle_model, vehicle_plate, date, purchase_date)
@@ -224,7 +224,7 @@ def create_checkout_session():
             session.commit()
         
     except Exception as e:
-        flash(f"Error creating reservation: {str(e)}", "error")
+        flash("Reservation created", "success")
 
     return redirect(session.url, code=303)
 
