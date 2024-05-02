@@ -189,6 +189,13 @@ def cart():
 
     return render_template("cart.html", spot=spot, user=getUser(), vehicles=vehicles, current_vehicle=current_vehicle, garage=garage)
 
+@app.route('/empty_cart', methods=['POST'])
+@login_required
+def empty_cart():
+    current_user.reserved = -1
+    session.commit()
+    return redirect(url_for("cart"))
+
 
 @app.route('/create_checkout_session', methods=['POST'])
 @login_required
