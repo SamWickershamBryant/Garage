@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Garages{% endblock %}
+{% block title %}Cart{% endblock %}
 
 {% block content %}
 <div class="cart_container">
@@ -10,34 +10,44 @@
     <!-- Display cart -->
     {% if not spot %}
     <p>Your cart is currently empty.</p>
+    <a href="/allgarages" class="btn btn-secondary btn-lg" type="button">View garages.</a>
     {% else %}
     <div class="card text-center">
         <div class="card-header">
             Reserved Spot
         </div>
-    <div class="card-body">
-        <h5 class="card-title">Spot numer: {{ spot.number }}</h5>
-        <p class="card-text">Reservation Date: {{ spot.reservation_date }}</p>
-        <p class="card-text">Price: ${{ spot.price }}.00</p>
+        <div class="card-body">
+            <h5 class="card-title">Garage: {{ garage.name }}</h5>
+            <h5 class="card-title">Spot numer: {{ spot.number }}</h5>
+            <p class="card-text">Reservation Date: {{ spot.reservation_date }}</p>
+            <p class="card-text">Price: ${{ spot.price }}.00</p>
+        </div>
+
+        <form action="/create_checkout_session" method="POST">
+            <input type="hidden" name="spot_id" value="{{ spot.id }}">
+            <input type="hidden" name="spot_num" value="{{ spot.number }}">
+            <input type="hidden" name="garage_name" value="{{ garage.name }}">
+            <input type="hidden" name="reservation_date" value="{{ spot.reservation_date }}">
+            <label for="vehicle" style="display: inline-block; margin-right: 10px; font-size: 20px;">Reservation for:</label>
+            {% for vehicle in vehicles %}
+                {% if vehicle.current_vehicle %}
+                <p style="display: inline-block; margin-right: 10px; font-size: 20px;">{{ vehicle.vehicle_model }} - {{ vehicle.license_plate }}</p>
+                <input type="hidden" name="vehicle" value="{{ vehicle.id }}"> 
+                <input type="hidden" name="vehicle_model" value="{{ vehicle.vehicle_model }}">
+                <input type="hidden" name="vehicle_plate" value="{{ vehicle.license_plate }}"> 
+                {% endif %}
+            {% endfor %}
+
+            {% if spot.price == 30 %}
+            <input type="hidden" name="product_id" value="prod_PyXS1qmP2S8xev">
+            <input type="hidden" name="price_id" value="price_1P8aNdCLh6RFSyLpLEtRt4Xl">
+            {% else %}
+            <input type="hidden" name="product_id" value="prod_PyXSkiKXnlacTs">
+            <input type="hidden" name="price_id" value="price_1P8aNzCLh6RFSyLpS02m5kPr">
+            {% endif %}
+            <input type="submit" class="btn btn-primary" value="Checkout">
+        </form>
     </div>
-    </div>
-    {% endif %}
-    {% if spot.price == 30 %}
-    <form action="/create_checkout_session" method="POST">
-        <input type="hidden" name="product_id" value="prod_PyXS1qmP2S8xev">
-        <input type="hidden" name="price_id" value="price_1P8aNdCLh6RFSyLpLEtRt4Xl">
-        <button type="submit" class="btn btn-primary">Checkout</button>
-    </form>
-    {% else %}
-    <form action="/create_checkout_session" method="POST">
-        <input type="hidden" name="product_id" value="prod_PyXSkiKXnlacTs">
-        <input type="hidden" name="price_id" value="price_1P8aNzCLh6RFSyLpS02m5kPr">
-        <button type="submit" class="btn btn-primary">Checkout</button>
-    </form>
     {% endif %}
 </div>
 {% endblock %}
-
-
-
-

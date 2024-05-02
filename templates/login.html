@@ -11,10 +11,12 @@
         </div>
     <form role="form" action="/login" method="post" class="login-form">
         {{ form.hidden_tag() }}
+        <!-- Username-->
         <div class="form-group">
-          <label for="exampleInputEmail1"><i class="fa fa-user"></i> Email address:</label>
+          <label for="exampleInputUsername1"><i class="fa fa-user"></i> Username:</label>
           <input type="username" id="form-username" name="username" class="form-control" placeholder="Enter username">
         </div>
+        <!-- Password -->
         <div class="form-group">
             <label for="exampleInputPassword1"><i class="fa fa-lock"></i> Password:</label>
           <input type="password" id="form-password" name="password" class="form-control" placeholder="Password">
@@ -28,6 +30,7 @@
             <button type="submit" class="btn btn-primary form-control">Sign in</button>
         </div>
       </form>
+      <!-- Sign up link -->
       <h5>Don't have an account? <a href="/signup" class="bold">Sign up</a></h5>
     </div>
 </div>

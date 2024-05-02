@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}MyGarage{% endblock %}
 
 {% block content %}
 
@@ -12,7 +12,7 @@
             <form id="searchForm" action="/search" method="GET">
                 <input type="text" id="locationInput" name="location" placeholder="Enter location">
                 <input type="hidden" id="hiddenLocation" name="hiddenLocation">
-                <button class="btn btn-primary" type="submit">Get Started</button>
+                <button class="btn btn-primary" type="submit">Find Parking</button>
             </form>
         </div>
   </div>
@@ -28,8 +28,8 @@
           Weekday Parking
         </div>
         <div class="card-body">
-          <h5 class="card-title">Park for $30/Day</h5>
-          <p class="card-text">Search for a garage near you.</p>
+          <h5 class="card-title"><strong>Park for $30/Day</strong></h5>
+          <p class="card-text" style="font-size: 20px;">Search for a garage near you.</p>
         </div>
         <div class="card-footer text-muted">
           {% if current_user.is_authenticated %}
@@ -44,8 +44,8 @@
           Weekend Parking
         </div>
         <div class="card-body">
-          <h5 class="card-title">Park for $50/Day</h5>
-          <p class="card-text">Search for a garage near you.</p>
+          <h5 class="card-title"><strong>Park for $50/Day</strong></h5>
+          <p class="card-text" style="font-size: 20px;">Search for a garage near you.</p>
         </div>
         <div class="card-footer text-muted">
           {% if current_user.is_authenticated %}
@@ -57,4 +57,5 @@
       </div>
     </div>
 </div>
+
 {% endblock %}

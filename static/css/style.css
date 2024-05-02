@@ -113,9 +113,13 @@
     }
 }
 /* Main */
+.card {
+    width: 500px;
+}
 .spot-card {
     margin: 5px;
-    width: 200px;
+    width: 250px;
+    height: 200px;
     cursor: pointer;
     transition: transform 0.2s; 
 }
@@ -152,7 +156,7 @@
     align-items: center;
     justify-content: center;
     margin: 10vh auto;
-    height: 62vh;
+    height: 60vh;
     background-color: #ffffff;
     z-index: 1;
     width: 100%;
@@ -175,6 +179,7 @@
     -moz-text-fill-color:transparent;*/
 }
 .main__container h2 {
+    /*align-items: flex-end;*/
     font-size: 60px;
     padding: 20px;
     text-align: center;
@@ -403,14 +408,6 @@
         width: 100px;
     }
 }
-.garage__container {
-    width: 100vw;
-}
-.container h1 {
-    padding-top: 100px;
-    padding-bottom: 20px;
-    font-size: 60px;
-}
 .search__container h1 {
     font-size: 60px;
 }
@@ -442,7 +439,40 @@ button:hover {
     background-color: #0056b3;
 }
 
-
+.garage_list_container {
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+    height: auto;
+    
+}
+.garage_list_header {
+    position: absolute;
+    align-items: flex-start;
+    top: 100px;
+    left: 50px;
+}
+.garage_list_header h1 {
+    font-size: 50px;
+}
+.garage_list {
+    position: relative;
+    height: auto;
+    top: 150px;
+    margin-left: 50px;
+    margin-right: 100px;
+    align-content: center;
+}
+.garage_list h1 {
+    top: 100px;
+    left: 50px;
+}
+.container h1 {
+    left: 0;
+    padding-top: 100px;
+    padding-bottom: 20px;
+    font-size: 60px;
+}
 .index_container {
     position: absolute;
 }
@@ -484,8 +514,13 @@ button:hover {
     color: #999; 
     font-style: italic; 
 }
-
-
+/* garage css */
+.garage__container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: space-around;
+}
 .garage__info {
     position: relative;
     width: 100%;
@@ -623,7 +658,7 @@ button[type="submit"]:hover {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 90vh;
+    height: 100vh;
 }
 .cart_head {
     margin-top: 50px;
@@ -640,6 +675,10 @@ button[type="submit"]:hover {
 }
 .spot_container h2 {
     font-size: 40px;
+}
+.cart button {
+    font-size: 25px;
+    background-color: #000127;
 }
 
 /* Login */
@@ -723,4 +762,60 @@ input[type="password"] {
 .thanks_container h2 {
     text-align: center;
     font-size: 30px;
+}
+.reservation__container__header {
+    display: flex;
+    /*margin: 10vh auto;*/
+    margin-top: 120px;
+    margin-left: 100px;
+}
+.reservation__container__header h1 {
+    font-size: 50px;
+}
+.reservation__container {
+    display: flex;
+    flex-direction: column;
+    flex-flow: column-reverse;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    
+}
+.res-card {
+    margin: 50px;
+    padding: auto;
+    border: 1px solid rgb(54, 54, 54);
+    border-radius: 8px;
+}
+.res-card-header {
+    font-size: 30px;
+}
+
+.vehicle_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    z-index: 1;
+    width: 100%;
+    max-width: 1400px;
+    margin-top: 40px;
+    padding-bottom: 250px;
+    
+}
+button[type="set"] {
+    display: inline-block; 
+    vertical-align: middle;
+    width: 150px; 
+    height: 40px;
+    font-size: 15px;
+    background-color: #5a91cb; 
+    color: #fff; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+
+}
+button[type="set"]:hover {
+    background-color: #4c7fb5; 
 }
